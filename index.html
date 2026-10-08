@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>J.D-Store — Moda & Estilo</title>
 <style>
+ <img src="1791503252500.jpg" style="width:100%; max-width:300px; border-radius:16px;">
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   :root {
     --bg:#fdfbf7; --card:#ffffff; --soft:#f5f0e8;
@@ -724,7 +725,7 @@
   $("btnCheckout").onclick = () => {
     if (!cart.length) return window.toast("Carrinho vazio!", "err");
     if (!user) { window.toast("Faça login primeiro.", "err"); openLogin(); return; }
-    let msg = `*🛍 Novo Pedido —  J.D-Store*\n\n`;
+    let msg = `*🛍️Novo Pedido —  J.D-Store*\n\n`;
     msg += `*Cliente:* ${user.name}\n*E-mail:* ${user.email}\n\n*Itens:*\n`;
     cart.forEach((c, i) => { msg += `${i+1}. ${c.name} — ${c.qty}x R$ ${money(c.price)} = R$ ${money(c.price * c.qty)}\n`; });
     msg += `\n*Total: R$ ${money(cart.reduce((s, c) => s + c.price * c.qty, 0))}*\n\nOlá! Fiz esse pedido pela loja. Como prosseguir com pagamento e entrega? Obrigado(a)! 💛`;

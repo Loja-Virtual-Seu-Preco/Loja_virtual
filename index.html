@@ -538,7 +538,7 @@
   $("cPrev").onclick = () => move(-1);
   $("cNext").onclick = () => move(1);
 
-  /* ---------- Banners Realtime (Firebase) ---------- */
+    /* ---------- Banners Realtime (Firebase) ---------- */
   onSnapshot(bannerCollection, (snapshot) => {
     banners = [];
     snapshot.forEach((docSnap) => {
@@ -550,11 +550,12 @@
     }
   });
 
-  async function saveBannerToDB(bannerData) {
+
+    async function saveBannerToDB(bannerData) {
     try {
       const docId = String(Date.now());
       await setDoc(doc(db, "LOJA-VIRTUAL-BANNERS", docId), bannerData);
-      window.toast("Banner adicionado!", "ok");
+      window.toast("Banner salvo no banco!", "ok");
     } catch (e) {
       console.error("Erro ao salvar banner:", e);
       window.toast("Erro ao salvar banner", "err");

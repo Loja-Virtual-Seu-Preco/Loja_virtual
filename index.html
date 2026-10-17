@@ -116,12 +116,12 @@
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:16px; }
   .pcard { background:var(--card); border-radius:var(--r); overflow:hidden; box-shadow:var(--sh2); position:relative; transition:transform .2s; }
   .pcard:active { transform:scale(0.97); }
-  .pcard .pimg { width:100%; aspect-ratio:1; background:var(--soft); position:relative; overflow:hidden; }
+  .pcard .pimg { width:100%; aspect-ratio:1; background:var(--soft); position:relative; overflow:hidden; cursor:pointer; }
   .pcard .pimg img { width:100%; height:100%; object-fit:cover; }
   .pcard .pimg .ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:40px; color:var(--line); }
-  .pcard .tag { position:absolute; top:8px; left:8px; background:rgba(255,255,255,0.95); color:var(--rose2); font-size:10px; font-weight:bold; padding:4px 10px; border-radius:20px; }
+  .pcard .tag { position:absolute; top:8px; left:8px; background:rgba(255,255,255,0.95); color:var(--rose2); font-size:10px; font-weight:bold; padding:4px 10px; border-radius:20px; z-index:2; }
   .pcard .pbody { padding:14px; }
-  .pcard .pname { font-size:14px; font-weight:bold; margin-bottom:4px; line-height:1.3; }
+  .pcard .pname { font-size:14px; font-weight:bold; margin-bottom:4px; line-height:1.3; cursor:pointer; }
   .pcard .pdesc { font-size:11px; color:var(--muted); margin-bottom:10px; line-height:1.4; min-height:30px; }
   .pcard .pprice { font-size:18px; font-weight:bold; color:var(--rose2); }
   .pcard .padd { width:100%; margin-top:10px; padding:10px; border:none; border-radius:10px; background:var(--dark); color:#fff; font-size:13px; font-weight:bold; cursor:pointer; transition:all .2s; }
@@ -165,6 +165,17 @@
   .btn-pri { background:var(--rose); color:#fff; } .btn-pri:active { transform:scale(0.97); }
   .btn-gh { background:var(--soft); color:var(--dark); }
   .btn-dn { background:var(--danger); color:#fff; }
+
+  /* ===== MODAL DETALHES PRODUTO (SHOPEE STYLE) ===== */
+  .detail-box { max-width: 500px; max-height: 85vh; padding: 20px; position: relative; }
+  .close-detail { position: absolute; top: 16px; right: 16px; font-size: 22px; cursor: pointer; color: var(--muted); background: var(--soft); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+  .detail-img-wrap { width: 100%; aspect-ratio: 1; background: var(--soft); border-radius: 12px; overflow: hidden; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
+  .detail-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-tag { display: inline-block; background: var(--soft); color: var(--rose2); font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; margin-bottom: 8px; }
+  .detail-box h2 { font-size: 20px; margin-bottom: 6px; font-weight: bold; }
+  .detail-price { font-size: 22px; font-weight: bold; color: var(--rose2); margin-bottom: 14px; }
+  .detail-section-title { font-size: 13px; font-weight: bold; color: var(--muted); margin-top: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .detail-box p { font-size: 14px; line-height: 1.6; color: var(--dark); }
 
   /* ===== CART ===== */
   .cart-d { position:fixed; top:0; right:-380px; width:360px; max-width:92%; height:100%; z-index:400; background:var(--card); transition:right .3s; display:flex; flex-direction:column; box-shadow:-4px 0 30px rgba(0,0,0,0.15); }
@@ -221,8 +232,8 @@
 <header>
   <div class="brand">
     <button class="h-btn" id="btnMenu">☰</button>
-    <img   <img src="1792256825912.png"alt="seu preço no bom lugar"width="100"
-    <div class="name">J.D-Store</b></div>
+    <img src="1792256825912.png" alt="seu preço no bom lugar" width="100">
+    <div class="name">J.D-Store</div>
   </div>
   <div class="h-actions">
     <button class="h-btn" id="btnCart">🛒<span class="badge hide" id="cartBadge">0</span></button>
@@ -315,8 +326,8 @@
     <h3 id="mProdTitle">Novo Produto</h3>
     <div class="fld"><label>Nome</label><input type="text" id="fName" placeholder="Ex: Vestido floral"></div>
     <div class="fld"><label>Descrição</label><textarea id="fDesc" placeholder="Detalhes..."></textarea></div>
-   <div class="fld"><label>Estoque</label><textarea id="fEsto" placeholder="Estoques..."></textarea></div>
-   <div class="fld"><label>Preço (R$)</label><input type="number" id="fPrice" placeholder="0.00" step="0.01" min="0"></div>
+    <div class="fld"><label>Estoque</label><textarea id="fEsto" placeholder="Estoques..."></textarea></div>
+    <div class="fld"><label>Preço (R$)</label><input type="number" id="fPrice" placeholder="0.00" step="0.01" min="0"></div>
     <div class="fld"><label>Categoria</label>
       <select id="fCat">
         <option>Roupas</option><option>Sapatos</option><option>Acessórios</option><option>Ferramentas</option>
@@ -363,6 +374,25 @@
   </div>
 </div>
 
+<!-- MODAL: DETALHES DO PRODUTO (ESTILO SHOPEE) -->
+<div class="m-bg" id="mDetail">
+  <div class="m-box detail-box">
+    <button class="close-detail" id="btnCloseDetail">✕</button>
+    <div class="detail-img-wrap" id="detailImgWrap">
+      <div id="detailImgContainer"></div>
+    </div>
+    <div class="detail-content">
+      <span class="detail-tag" id="detailTag"></span>
+      <h2 id="detailName"></h2>
+      <div class="detail-price" id="detailPrice"></div>
+      <div class="detail-section-title">Descrição do Produto</div>
+      <p id="detailDesc"></p>
+      <div class="detail-section-title" id="detailEstoWrap">Estoque / Detalhes Adicionais</div>
+      <p id="detailEsto"></p>
+    </div>
+  </div>
+</div>
+
 <!-- CART -->
 <div class="cart-d" id="cartD">
   <div class="cart-h">
@@ -390,7 +420,7 @@
     <input type="text" id="lgName" placeholder="Seu nome">
     <input type="email" id="lgEmail" placeholder="seu@email.com">
     <button class="btn btn-pri" id="btnLoginEmail" style="margin-top:8px;">Entrar / Cadastrar</button>
-    <div class="lg-note">⚠️ Login Google real precisa de Client ID (instrução no código). Sem isso, o e-mail já funciona.</div>
+    <div class="lg-note">⚠️ Login Google real precisa de Client ID. Sem isso, o e-mail já funciona.</div>
     <button class="btn btn-gh" id="btnCloseLogin" style="margin-top:10px;">Fechar</button>
   </div>
 </div>
@@ -424,7 +454,7 @@
   /* ---------- App State & Storage ---------- */
   const $ = (id) => document.getElementById(id);
   const ADMIN = "sisialeane@gmail.com";
-    const WA = "5581994497746";
+  const WA = "5581994497746";
   const CLIENT_ID = ""; 
   const load = (k, def) => { try { return JSON.parse(localStorage.getItem(k)) ?? def; } catch { return def; } };
   const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -440,10 +470,6 @@
   let cIndex = 0;
   let cTimer = null;
   let activeCat = "Todos";
-  
-  
-  
-  
   
   /* ---------- Utils ---------- */
   const money = (n) => Number(n||0).toFixed(2).replace(".", ",");
@@ -578,9 +604,9 @@
       card.innerHTML = `
         ${isAdmin() && adminMode ? `<div class="adm"><button onclick="editProd('${p.id}')">✏</button><button onclick="delProd('${p.id}')">🗑️</button></div>` : ""}
         <div class="tag">${esc(p.cat || 'Geral')}</div>
-        <div class="pimg">${p.img ? `<img src="${p.img}">` : `<div class="ph">📷</div>`}</div>
+        <div class="pimg" onclick="openDetailModal('${p.id}')">${p.img ? `<img src="${p.img}">` : `<div class="ph">📷</div>`}</div>
         <div class="pbody">
-          <div class="pname">${esc(p.name)}</div>
+          <div class="pname" onclick="openDetailModal('${p.id}')">${esc(p.name)}</div>
           <div class="pdesc">${esc(p.desc)}</div>
           <div class="pprice">R$ ${money(p.price)}</div>
           <button class="padd" onclick="addCart('${p.id}')">+ Adicionar</button>
@@ -611,7 +637,7 @@
     }
   }
 
-  /* ---------- Product Modal ---------- */
+  /* ---------- Product Modal (Admin) ---------- */
   function openProdModal(id) {
     editId = id || null;
     if (id) {
@@ -620,6 +646,7 @@
       $("mProdTitle").textContent = "Editar Produto";
       $("fName").value = p.name || ""; 
       $("fDesc").value = p.desc || "";
+      $("fEsto").value = p.esto || "";
       $("fPrice").value = p.price || ""; 
       $("fCat").value = p.cat || "Roupas";
       curProdImg = p.img || "";
@@ -627,7 +654,7 @@
       else $("fImgPrev").classList.add("hide");
     } else {
       $("mProdTitle").textContent = "Novo Produto";
-      $("fName").value = ""; $("fDesc").value = ""; $("fPrice").value = ""; $("fCat").value = "Roupas";
+      $("fName").value = ""; $("fDesc").value = ""; $("fEsto").value = ""; $("fPrice").value = ""; $("fCat").value = "Roupas";
       curProdImg = ""; $("fImgPrev").classList.add("hide");
     }
     $("fImg").value = "";
@@ -647,11 +674,41 @@
     if (!name) return window.toast("Digite o nome", "err");
     if (isNaN(price) || price < 0) return window.toast("Preço inválido", "err");
     
-    const payload = { name, desc: $("fDesc").value.trim(), price, cat: $("fCat").value, img: curProdImg };
+    const payload = { name, desc: $("fDesc").value.trim(), esto: $("fEsto").value.trim(), price, cat: $("fCat").value, img: curProdImg };
     saveProductToDB(payload, editId);
     $("mProd").classList.remove("show");
   };
   $("btnCancelProd").onclick = () => $("mProd").classList.remove("show");
+
+  /* ---------- Modal Detalhes do Produto (Estilo Shopee) ---------- */
+  function openDetailModal(id) {
+    const p = products.find(x => String(x.id) === String(id));
+    if (!p) return;
+    
+    $("detailName").textContent = p.name || "";
+    $("detailDesc").textContent = p.desc || "Nenhuma descrição informada.";
+    $("detailPrice").textContent = "R$ " + money(p.price);
+    $("detailTag").textContent = p.cat || "Geral";
+    
+    if (p.esto) {
+      $("detailEsto").textContent = p.esto;
+      $("detailEstoWrap").style.display = "block";
+      $("detailEsto").style.display = "block";
+    } else {
+      $("detailEstoWrap").style.display = "none";
+      $("detailEsto").style.display = "none";
+    }
+
+    const imgContainer = $("detailImgContainer");
+    imgContainer.innerHTML = p.img ? `<img src="${p.img}">` : `<div style="font-size:50px; color:var(--line);">📷</div>`;
+
+    $("mDetail").classList.add("show");
+  }
+
+  window.openDetailModal = openDetailModal;
+
+  $("btnCloseDetail").onclick = () => $("mDetail").classList.remove("show");
+  $("mDetail").onclick = (e) => { if (e.target.id === "mDetail") $("mDetail").classList.remove("show"); };
 
   /* ---------- Banner Modal ---------- */
   function openBannerModal() {
@@ -721,10 +778,10 @@
   $("btnCloseCart").onclick = () => $("cartD").classList.remove("show");
 
   /* ---------- Checkout WhatsApp ---------- */
-  $("btnCheckout").onclick = () => {
+   $("btnCheckout").onclick = () => {
     if (!cart.length) return window.toast("Carrinho vazio!", "err");
     if (!user) { window.toast("Faça login primeiro.", "err"); openLogin(); return; }
-    let msg = `*🛍️Novo Pedido —  J.D-Store*\n\n`;
+    let msg = `*🛍️Novo Pedido — J.D-Store*\n\n`;
     msg += `*Cliente:* ${user.name}\n*E-mail:* ${user.email}\n\n*Itens:*\n`;
     cart.forEach((c, i) => { msg += `${i+1}. ${c.name} — ${c.qty}x R$ ${money(c.price)} = R$ ${money(c.price * c.qty)}\n`; });
     msg += `\n*Total: R$ ${money(cart.reduce((s, c) => s + c.price * c.qty, 0))}*\n\nOlá! Fiz esse pedido pela loja. Como prosseguir com pagamento e entrega? Obrigado(a)! 💛`;
@@ -781,12 +838,12 @@
   };
 
   /* ---------- Admin buttons ---------- */
-$("btnAddProd").onclick = () => openProdModal();
+  $("btnAddProd").onclick = () => openProdModal();
   $("btnAddBanner").onclick = () => openBannerModal();
   $("btnMngBanner").onclick = () => openMng();
 
   /* ---------- Close modals on backdrop ---------- */
-  ["mProd","mBanner","mMng"].forEach(id => {
+  ["mProd","mBanner","mMng","mDetail"].forEach(id => {
     $(id).onclick = (e) => { if (e.target.id === id)$(id).classList.remove("show"); };
   });
   $("lgBg").onclick = (e) => { if (e.target.id === "lgBg") closeLogin(); };
@@ -834,3 +891,5 @@ $("btnAddProd").onclick = () => openProdModal();
 </script>
 </body>
 </html>
+
+  
